@@ -2,29 +2,32 @@ package pl.maprzybysz;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import pl.maprzybysz.entity.Attribute;
+import pl.maprzybysz.entity.Category;
 import pl.maprzybysz.entity.Product;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import java.util.List;
 
-public class App05OneToMany {
+public class App10ManyToMany {
 
-    private static Logger logger = LogManager.getLogger(App05OneToMany.class);
+    private static Logger logger = LogManager.getLogger(App10ManyToMany.class);
     private static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("unit");
 
 
     public static void main(String[] args) {
         EntityManager em = entityManagerFactory.createEntityManager();
+
         em.getTransaction().begin();
 
-        List<Product> products = em.createQuery("select p from Product p").getResultList();
+        Product product = em.find(Product.class, 3L);
+        logger.info(product);
+        logger.info(product.getAttributes());
 
-        for (Product product : products) {
-            logger.info(product.getName());
-            logger.info(product.getReviews());
-        }
+        Attribute attribute = em.find(Attribute.class, 1L);
+        logger.info(attribute);
+        logger.info(attribute.getProducts());
 
         em.getTransaction().commit();
         em.close();

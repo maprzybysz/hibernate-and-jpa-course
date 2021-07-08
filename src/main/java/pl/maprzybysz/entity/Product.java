@@ -3,6 +3,10 @@ package pl.maprzybysz.entity;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Product {
@@ -17,6 +21,14 @@ public class Product {
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
     private ProductType productType;
+    @OneToMany(mappedBy = "product", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    private List<Review> reviews = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Category category;
+    @ManyToMany(cascade = {CascadeType.PERSIST})
+    @JoinTable(joinColumns = {@JoinColumn(name = "product_id")},
+    inverseJoinColumns = {@JoinColumn(name="attribute_id")})
+    private Set<Attribute> attributes = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -74,6 +86,41 @@ public class Product {
         this.productType = productType;
     }
 
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void addReview(Review review) {
+        reviews.add(review);
+        review.setProduct(this);
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Set<Attribute> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Set<Attribute> attributes) {
+        this.attributes = attributes;
+    }
+
+
+    public void addAttributes(Attribute attribute) {
+        attributes.add(attribute);
+        attribute.getProducts().add(this);
+    }
+
     @Override
     public String toString() {
         return "Product{" +
@@ -86,4 +133,7 @@ public class Product {
                 ", productType=" + productType +
                 '}';
     }
+
+
+
 }

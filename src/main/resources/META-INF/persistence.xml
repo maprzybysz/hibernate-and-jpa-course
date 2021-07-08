@@ -5,6 +5,9 @@
              version="2.1">
     <persistence-unit name="unit" transaction-type="RESOURCE_LOCAL">
         <class>pl.maprzybysz.entity.Product</class>
+        <class>pl.maprzybysz.entity.Review</class>
+        <class>pl.maprzybysz.entity.Category</class>
+        <class>pl.maprzybysz.entity.Attribute</class>
         <properties>
             <property name="javax.persistence.jdbc.driver"
                       value="com.mysql.cj.jdbc.Driver" />

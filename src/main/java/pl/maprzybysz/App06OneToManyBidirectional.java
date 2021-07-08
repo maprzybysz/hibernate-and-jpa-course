@@ -3,15 +3,16 @@ package pl.maprzybysz;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import pl.maprzybysz.entity.Product;
+import pl.maprzybysz.entity.Review;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.util.List;
 
-public class App05OneToMany {
+public class App06OneToManyBidirectional {
 
-    private static Logger logger = LogManager.getLogger(App05OneToMany.class);
+    private static Logger logger = LogManager.getLogger(App06OneToManyBidirectional.class);
     private static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("unit");
 
 
@@ -19,11 +20,10 @@ public class App05OneToMany {
         EntityManager em = entityManagerFactory.createEntityManager();
         em.getTransaction().begin();
 
-        List<Product> products = em.createQuery("select p from Product p").getResultList();
-
-        for (Product product : products) {
-            logger.info(product.getName());
-            logger.info(product.getReviews());
+        List<Review> reviews = em.createQuery("select r from Review r").getResultList();
+        for (Review review : reviews) {
+            logger.info(review);
+            logger.info(review.getProduct());
         }
 
         em.getTransaction().commit();
