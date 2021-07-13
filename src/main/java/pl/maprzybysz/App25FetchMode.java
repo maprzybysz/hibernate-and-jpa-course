@@ -2,16 +2,16 @@ package pl.maprzybysz;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import pl.maprzybysz.entity.Product;
+import pl.maprzybysz.entity.Order;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import java.util.List;
+import javax.persistence.TypedQuery;
 
-public class App05OneToMany {
+public class App25FetchMode {
 
-    private static Logger logger = LogManager.getLogger(App05OneToMany.class);
+    private static Logger logger = LogManager.getLogger(App25FetchMode.class);
     private static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("unit");
 
 
@@ -19,14 +19,15 @@ public class App05OneToMany {
         EntityManager em = entityManagerFactory.createEntityManager();
         em.getTransaction().begin();
 
-        List<Product> products = em.createQuery("select p from Product p").getResultList();
+        //Order order = em.find(Order.class, 1L);
 
-        for (Product product : products) {
-            logger.info(product.getName());
-            logger.info(product.getReviews());
-        }
+        TypedQuery<Order> order = em.createQuery("select o from Order o", Order.class);
+
+
 
         em.getTransaction().commit();
         em.close();
+
+
     }
 }

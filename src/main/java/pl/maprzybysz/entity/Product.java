@@ -22,7 +22,7 @@ public class Product {
     @Column(name = "type")
     private ProductType productType;
     @OneToMany(mappedBy = "product", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
-    private List<Review> reviews = new ArrayList<>();
+    private Set<Review> reviews = new HashSet<>();
     @ManyToOne(fetch = FetchType.LAZY)
     private Category category;
     @ManyToMany(cascade = {CascadeType.PERSIST})
@@ -86,11 +86,11 @@ public class Product {
         this.productType = productType;
     }
 
-    public List<Review> getReviews() {
+    public Set<Review> getReviews() {
         return reviews;
     }
 
-    public void setReviews(List<Review> reviews) {
+    public void setReviews(Set<Review> reviews) {
         this.reviews = reviews;
     }
 
