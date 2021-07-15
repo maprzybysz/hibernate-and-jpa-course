@@ -11,6 +11,7 @@
         <class>pl.maprzybysz.entity.Customer</class>
         <class>pl.maprzybysz.entity.Order</class>
         <class>pl.maprzybysz.entity.OrderRow</class>
+        <class>pl.maprzybysz.entity.batch.BatchReview</class>
         <properties>
             <property name="javax.persistence.jdbc.driver"
                       value="com.mysql.cj.jdbc.Driver" />
@@ -25,6 +26,9 @@
                       value="true" />
             <property name="hibernate.format_sql" value="true"/>
             <property name="hibernate.hbm2ddl.auto" value="validate"/>
+            <property name="hibernate.jdbc.batch_size" value="5"/>
+            <property name="hibernate.order_updates" value="true"/>
+            <property name="hibernate.order_inserts" value="true"/>
         </properties>
 
     </persistence-unit>

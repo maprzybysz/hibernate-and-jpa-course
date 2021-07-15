@@ -2,16 +2,16 @@ package pl.maprzybysz;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import pl.maprzybysz.entity.Order;
+import org.hibernate.annotations.QueryHints;
+import pl.maprzybysz.entity.batch.BatchReview;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
 
-public class App25FetchMode {
+public class App32UpdateQuerying {
 
-    private static Logger logger = LogManager.getLogger(App25FetchMode.class);
+    private static Logger logger = LogManager.getLogger(App32UpdateQuerying.class);
     private static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("unit");
 
 
@@ -19,11 +19,12 @@ public class App25FetchMode {
         EntityManager em = entityManagerFactory.createEntityManager();
         em.getTransaction().begin();
 
-        //Order order = em.find(Order.class, 1L);
-
-        TypedQuery<Order> order = em.createQuery("select o from Order o", Order.class);
-
-
+        int i = em.createQuery("update Review r SET rating=:rating " +
+                " where r.product.id=:id")
+                .setParameter("rating", 11)
+                .setParameter("id", 1L)
+                .executeUpdate();
+        logger.info(i);
 
         em.getTransaction().commit();
         em.close();
@@ -31,3 +32,4 @@ public class App25FetchMode {
 
     }
 }
+

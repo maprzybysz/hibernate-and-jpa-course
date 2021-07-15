@@ -2,31 +2,34 @@ package pl.maprzybysz;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
 import pl.maprzybysz.entity.Order;
+import pl.maprzybysz.entity.batch.BatchReview;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
-import java.util.Arrays;
 import java.util.List;
 
-public class App26QueryWithIn {
+public class App29Insert {
 
-    private static Logger logger = LogManager.getLogger(App26QueryWithIn.class);
+    private static Logger logger = LogManager.getLogger(App29Insert.class);
     private static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("unit");
 
 
     public static void main(String[] args) {
         EntityManager em = entityManagerFactory.createEntityManager();
+        em.unwrap(Session.class).setJdbcBatchSize(10);
         em.getTransaction().begin();
 
-        List<Order> orders = em.createQuery("select o from Order o where id in (:ids)", Order.class)
-                .setParameter("ids", Arrays.asList(1L, 3L, 5L))
-                .getResultList();
+        Long lastId = em.createQuery("select max(r.id) from BatchReview r", Long.class).getSingleResult();
 
-        for (Order order : orders) {
-            logger.info(order);
+        for(long i=1; i<= 25; i++){
+            if(i % 5==0){
+                em.flush();
+                em.clear();
+            }
+            em.persist(new BatchReview(lastId+i, "tresc", 5, 1L));
         }
 
         em.getTransaction().commit();
@@ -35,3 +38,4 @@ public class App26QueryWithIn {
 
     }
 }
+
