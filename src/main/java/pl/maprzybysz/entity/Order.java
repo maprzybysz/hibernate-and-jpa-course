@@ -1,8 +1,13 @@
 package pl.maprzybysz.entity;
 
+
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -26,6 +31,8 @@ import java.util.UUID;
 })
 @Entity
 @Table(name = "\"order\"")
+@Cacheable
+@Cache(region = "order", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
