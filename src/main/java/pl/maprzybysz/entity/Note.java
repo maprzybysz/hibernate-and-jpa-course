@@ -1,21 +1,26 @@
 package pl.maprzybysz.entity;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import java.time.LocalDateTime;
 
 @Entity
-public class Review implements Comparable<Review>{
+public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String content;
-    private int rating;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Product product;
+    private LocalDateTime created;
+
+    public Note() {
+    }
+
+    public Note(String content, LocalDateTime created) {
+        this.content = content;
+        this.created = created;
+    }
 
     public Long getId() {
         return id;
@@ -33,33 +38,20 @@ public class Review implements Comparable<Review>{
         this.content = content;
     }
 
-    public int getRating() {
-        return rating;
+    public LocalDateTime getCreated() {
+        return created;
     }
 
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
     }
 
     @Override
     public String toString() {
-        return "Review{" +
+        return "Note{" +
                 "id=" + id +
                 ", content='" + content + '\'' +
-                ", rating=" + rating +
+                ", created=" + created +
                 '}';
-    }
-
-    @Override
-    public int compareTo(Review o) {
-        return o.id.compareTo(id);
     }
 }

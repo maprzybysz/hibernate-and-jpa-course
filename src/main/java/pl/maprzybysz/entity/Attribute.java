@@ -1,9 +1,11 @@
 package pl.maprzybysz.entity;
 
-import javax.persistence.*;
-import java.util.ArrayList;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -13,8 +15,14 @@ public class Attribute {
     private Long id;
     private String name;
     private String value;
+
     @ManyToMany(mappedBy = "attributes")
     private Set<Product> products = new HashSet<>();
+
+    public void removeProduct(Product product) {
+        products.remove(product);
+        product.getAttributes().remove(this);
+    }
 
     public Long getId() {
         return id;
@@ -47,10 +55,6 @@ public class Attribute {
     public void setProducts(Set<Product> products) {
         this.products = products;
     }
-    public void removeProduct(Product product) {
-        products.remove(product);
-        product.getAttributes().remove(this);
-    }
 
     @Override
     public String toString() {
@@ -60,6 +64,4 @@ public class Attribute {
                 ", value='" + value + '\'' +
                 '}';
     }
-
-
 }

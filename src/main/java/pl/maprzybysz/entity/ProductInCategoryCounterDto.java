@@ -1,10 +1,10 @@
 package pl.maprzybysz.entity;
 
-public class ProductInCategoryCounterDTO {
+public class ProductInCategoryCounterDto {
     private Long categoryId;
     private Long productInCategoryCounter;
 
-    public ProductInCategoryCounterDTO(Long categoryId, Long productInCategoryCounter) {
+    public ProductInCategoryCounterDto(Long categoryId, Long productInCategoryCounter) {
         this.categoryId = categoryId;
         this.productInCategoryCounter = productInCategoryCounter;
     }
@@ -13,16 +13,7 @@ public class ProductInCategoryCounterDTO {
         return categoryId;
     }
 
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
-
     public Long getProductInCategoryCounter() {
         return productInCategoryCounter;
     }
-
-    public void setProductInCategoryCounter(Long productInCategoryCounter) {
-        this.productInCategoryCounter = productInCategoryCounter;
-    }
-
 }

@@ -1,7 +1,11 @@
 package pl.maprzybysz.entity;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.Set;
 
 @Entity
@@ -11,7 +15,8 @@ public class Category {
     private Long id;
     private String name;
     private String description;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category"/*,cascade = {CascadeType.REMOVE}*/)
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
     private Set<Product> product;
 
     public Long getId() {

@@ -1,20 +1,24 @@
 package pl.maprzybysz.entity;
 
 import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 @NamedEntityGraphs({
         @NamedEntityGraph(
                 name = "order-rows",
-                attributeNodes = {@NamedAttributeNode(value = "orderRows", subgraph = "orderRows"),
-                        @NamedAttributeNode("customer")}, subgraphs = @NamedSubgraph(name = "orderRows",
-                attributeNodes = @NamedAttributeNode("product"))),
+                attributeNodes = {
+                        @NamedAttributeNode(value = "orderRows", subgraph = "orderRows"),
+                        @NamedAttributeNode("customer")
+                }, subgraphs = @NamedSubgraph(
+                name = "orderRows",
+                attributeNodes = @NamedAttributeNode("product"))
+        ),
         @NamedEntityGraph(
                 name = "order-and-rows",
                 attributeNodes = @NamedAttributeNode("orderRows")
@@ -29,13 +33,28 @@ public class Order {
     private LocalDateTime created;
     private BigDecimal total;
 
-    @OneToMany
+    @OneToMany(orphanRemoval = true)
     @JoinColumn(name = "order_id")
     @BatchSize(size = 10)
     private Set<OrderRow> orderRows;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Customer customer;
+
+    private String uuid = UUID.randomUUID().toString();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return Objects.equals(uuid, order.uuid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uuid);
+    }
 
     public Long getId() {
         return id;

@@ -1,11 +1,22 @@
 package pl.maprzybysz.entity;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -21,69 +32,56 @@ public class Product {
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
     private ProductType productType;
+
     @OneToMany(mappedBy = "product", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private Set<Review> reviews = new HashSet<>();
-    @ManyToOne(fetch = FetchType.LAZY)
+
+    @OneToOne(fetch = FetchType.LAZY)
     private Category category;
-    @ManyToMany(cascade = {CascadeType.PERSIST})
-    @JoinTable(joinColumns = {@JoinColumn(name = "product_id")},
-    inverseJoinColumns = {@JoinColumn(name="attribute_id")})
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(
+            joinColumns = { @JoinColumn(name = "product_id")},
+            inverseJoinColumns = { @JoinColumn(name = "attribute_id")}
+            )
     private Set<Attribute> attributes = new HashSet<>();
+
+    public void addAttributes(Attribute attribute) {
+        attributes.add(attribute);
+        attribute.getProducts().add(this);
+    }
+
+    public void addReview(Review review) {
+        reviews.add(review);
+        review.setProduct(this);
+    }
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public LocalDateTime getCreated() {
         return created;
     }
 
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
-    }
-
     public LocalDateTime getUpdated() {
         return updated;
-    }
-
-    public void setUpdated(LocalDateTime updated) {
-        this.updated = updated;
     }
 
     public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
     public ProductType getProductType() {
         return productType;
-    }
-
-    public void setProductType(ProductType productType) {
-        this.productType = productType;
     }
 
     public Set<Review> getReviews() {
@@ -94,13 +92,36 @@ public class Product {
         this.reviews = reviews;
     }
 
-    public Category getCategory() {
-        return category;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void addReview(Review review) {
-        reviews.add(review);
-        review.setProduct(this);
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
+
+    public void setUpdated(LocalDateTime updated) {
+        this.updated = updated;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public void setProductType(ProductType productType) {
+        this.productType = productType;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 
     public void setCategory(Category category) {
@@ -115,12 +136,6 @@ public class Product {
         this.attributes = attributes;
     }
 
-
-    public void addAttributes(Attribute attribute) {
-        attributes.add(attribute);
-        attribute.getProducts().add(this);
-    }
-
     @Override
     public String toString() {
         return "Product{" +
@@ -133,7 +148,4 @@ public class Product {
                 ", productType=" + productType +
                 '}';
     }
-
-
-
 }
