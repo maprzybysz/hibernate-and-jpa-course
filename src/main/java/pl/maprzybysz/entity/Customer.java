@@ -1,5 +1,6 @@
 package pl.maprzybysz.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.SortComparator;
 import org.hibernate.annotations.Cache;
@@ -25,6 +26,7 @@ public class Customer {
     private LocalDateTime created;
     private LocalDateTime updated;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "customer")
     @Cache(region = "orders", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Order> orders;
@@ -32,9 +34,11 @@ public class Customer {
     @ElementCollection
     private List<Address> address;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL, optional = false)
     private CustomerDetails customerDetails;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "customer_id")
     //@OrderBy("id desc")
