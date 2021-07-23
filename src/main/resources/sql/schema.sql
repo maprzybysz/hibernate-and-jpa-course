@@ -154,3 +154,5 @@ CREATE TABLE `customer_note` (
                                      FOREIGN KEY (`notes_id`) REFERENCES `note` (`id`)
 );
 
+
+ALTER TABLE `order` ADD COLUMN `version` BIGINT NULL DEFAULT 0 AFTER `uuid`;
